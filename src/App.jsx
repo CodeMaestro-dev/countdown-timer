@@ -64,8 +64,6 @@ export default function App() {
     setSec(input);
   };
 
-  // console.log(timer);
-
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center gap-5 bg-gradient-to-r from-[#040404] to-[#28272F]">
       <p className="text-white text-lg">{message != "" ? message : "Welcome to Tioluwani's Countdown Timer"}</p>
