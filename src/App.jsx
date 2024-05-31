@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import TimerControls from "./assets/components/TimerControls";
+import TimerDisplay from "./assets/components/TimerDisplay";
+import TimerInput from "./assets/components/TimerInput";
+
+export default function App() {
+  const [start, setStart] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [message, setMessage] = useState("");
+  const [sec, setSec] = useState(0);
+  const [min, setMin] = useState(0);
+  const [hrs, setHrs] = useState(0);
+
+  useEffect(() => {
+    if (start) {
+      if (sec != 0) {
+        setTimeout(() => {
+          setSec(sec - 1);
+        }, 1000);
+      }
+      if (sec == 0 && min != 0) {
+        setMin(min - 1);
+        setSec(59);
+      }
+      if (sec == 0 && min == 0 && hrs != 0) {
+        setHrs(hrs - 1);
+        setMin(59);
+        setSec(59);
+      }
+    }
+  }, [start, sec, min, hrs]);
+
+  const startControl = () => {
+    if (sec == 0 && min == 0 && hrs == 0) {
+      setStart(false);
+    } else {
+      setStart(true);
+      if (start) {
+        setStart(false);
+      }
+    }
+  };
+
+  const resetControl = () => {
+    setStart(false);
+    setHrs(0);
+    setMin(0);
+    setSec(0);
+    console.log(start, hrs, min, sec);
+  };
+
+  const changeHrs = (input) => {
+    setHrs(input);
+  };
+  const changeMin = (input) => {
+    setMin(input);
+  };
+  const changeSec = (input) => {
+    setSec(input);
+  };
+
+  // console.log(timer);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="h-screen w-full flex flex-col items-center justify-center gap-5 bg-gradient-to-r from-[#040404] to-[#28272F]">
+      <p className="text-white">Welcome to Tioluwani&apos;s Countdown Timer</p>
+      <TimerDisplay hrs={hrs} min={min} sec={sec} reset={reset} />
+      <TimerInput changeHrs={changeHrs} changeMin={changeMin} changeSec={changeSec} start={start} />
+      <TimerControls startControl={startControl} resetControl={resetControl} start={start} reset={reset} />
+    </div>
+  );
 }
-
-export default App
