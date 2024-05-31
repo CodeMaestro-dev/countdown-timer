@@ -29,13 +29,21 @@ export default function App() {
         setSec(59);
       }
     }
-  }, [start, sec, min, hrs]);
+    if (reset) {
+      setStart(false);
+      setHrs(0);
+      setMin(0);
+      setSec(0);
+    }
+  }, [start, reset, sec, min, hrs]);
 
   const startControl = () => {
     if (sec == 0 && min == 0 && hrs == 0) {
       setStart(false);
+      setMessage("Oops, seems you forgot to add time to countdown.");
     } else {
       setStart(true);
+      setMessage("Let the counting begin!!!");
       if (start) {
         setStart(false);
       }
@@ -43,11 +51,7 @@ export default function App() {
   };
 
   const resetControl = () => {
-    setStart(false);
-    setHrs(0);
-    setMin(0);
-    setSec(0);
-    console.log(start, hrs, min, sec);
+    setReset(true);
   };
 
   const changeHrs = (input) => {
@@ -64,7 +68,7 @@ export default function App() {
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center gap-5 bg-gradient-to-r from-[#040404] to-[#28272F]">
-      <p className="text-white">Welcome to Tioluwani&apos;s Countdown Timer</p>
+      <p className="text-white text-lg">{message != "" ? message : "Welcome to Tioluwani's Countdown Timer"}</p>
       <TimerDisplay hrs={hrs} min={min} sec={sec} reset={reset} />
       <TimerInput changeHrs={changeHrs} changeMin={changeMin} changeSec={changeSec} start={start} />
       <TimerControls startControl={startControl} resetControl={resetControl} start={start} reset={reset} />
